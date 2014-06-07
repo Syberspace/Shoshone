@@ -23,7 +23,7 @@ Dependencies:
 run `php server.php` as root (or someone who can open sockets)
 
 #### State of the code
-currently __Shoshone__ only can serve _php_ and _png_ files (and probably only the ones provided in the `webroot` subdirectory of this repository). The plan is to make it run and serve files like any other webserver with config files, multiple hostnames and whatnot (but that's very far in the future). The code structure is pretty much a first draft, incredibly awful and subject to many and large-scale changes.
+currently __Shoshone__ only can serve -_php_- _html_ and _png_ files (and probably only the ones provided in the `webroot` subdirectory of this repository). The plan is to make it run and serve files like any other webserver with config files, multiple hostnames and whatnot (but that's very far in the future). The code structure is pretty much a first draft, incredibly awful and subject to many and large-scale changes.
 
 #### Contributing
 if you really really really want to, i'm not gonna stop you from submitting a pull request.

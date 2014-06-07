@@ -2,6 +2,17 @@
 
 class ShoshoneUtil {
 
+	public static $HTTP_METHODS = array(
+		'GET',
+		'POST',
+		'HEAD',
+		'PUT',
+		'DELETE',
+		'TRACE',
+		'OPTIONS',
+		'CONNECT',
+	);
+
 	public static function str_firstword( $haystack ) {
 		return substr( $haystack, 0, strpos( $haystack, ' ' ) );
 	}

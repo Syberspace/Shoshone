@@ -1,14 +1,20 @@
 <?php
 
-require_once 'server-util.class.php';
+require_once 'shoshone-util.class.php';
 
 $sock = socket_create( AF_INET, SOCK_STREAM, SOL_TCP );
 $port = 80;
+
+echo 'opening socket on port ' . $port . PHP_EOL;
+echo 'this could take a while if port ' . $port . ' is currently being used' . PHP_EOL;
+do {
+	$connect = @socket_bind( $sock, 'localhost', $port );
+} while( !$connect );
+
 echo PHP_EOL;
 echo 'Starting server on port ' . $port . PHP_EOL;
 echo 'PHP version: ' . phpversion() . PHP_EOL;
 echo PHP_EOL;
-socket_bind( $sock, 'localhost', $port);
 
 date_default_timezone_set('Europe/Vienna');
 
@@ -18,16 +24,23 @@ socket_listen( $sock );
 
 while ( $res = socket_accept( $sock ) ) {
 
-	$request = '';
-	while ( $chr = socket_read( $res, 1 ) ) {
-		$request .= $chr;
+	$str_request = '';
+	$chr = true;
+	while ( socket_recv( $res, $chr, 1, MSG_WAITALL ) ) {#= socket_read( $res, 1 ) ) {
+		$str_request .= $chr;
+		echo ($chr);
+		if ( ShoshoneUtil::str_endswith( $str_request, chr(13).chr(10).chr(13).chr(10) ) ) break;
 	}
-	echo $request . PHP_EOL;
-	$response = Shoshone::parse_request( $request, $res );
+	echo $str_request . PHP_EOL;
+	
+	$reqeust = new Request( $str_request );
+	
+	$response = Shoshone::parse_request( $str_request, $res );
 	
 	
-			
-	socket_write( $res, (string)$response );
+	$r = (string)$response;
+	socket_write( $res, $r );
+
 	
 	socket_close( $res );
 	
@@ -71,35 +84,15 @@ class Shoshone {
 	}
 
 	public static function server_get ( $file ) {
-		if ( '/' === $file || '' === $file ) $file = 'index.php';
+		if ( '/' === $file || '' === $file ) $file = 'index.html';
 		
 		$file = ShoshoneUtil::path2webroot( $file );
 		$mime = RequestParser::getMimeInfo( $file );
 		
 		$response = new Response();
 		$response->contentType = $mime;
-		$content = '';
-		
-		switch( $mime ) {
-			case 'image/png': 
-				$f = fopen( $file, 'r' );
-				$content = fread( $f, filesize( $file ) );
-				$content = (file_get_contents( $file ));
-				fclose( $f );
-			break;
-			default:
 
-				ob_start();
-	
-				include $file;
-				$content = ob_get_contents();
-	
-				ob_end_clean();
-				$response->contentType = 'text/html';
-			break;
-		}
-		
-		$response->content = $content;
+		$response->content = file_get_contents( $file ); 
 
 	
 		return $response;

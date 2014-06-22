@@ -21,7 +21,7 @@ class Request {
 			}
 		}
 		
-		var_dump($this->fields);
+		#var_dump($this->fields);
 	}
 }
 ?>

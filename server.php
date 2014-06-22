@@ -26,7 +26,7 @@ while ( $res = socket_accept( $sock ) ) {
 
 	$str_request = '';
 	$chr = true;
-	while ( socket_recv( $res, $chr, 1, MSG_WAITALL ) ) {#= socket_read( $res, 1 ) ) {
+	while ( socket_recv( $res, $chr, 1, MSG_WAITALL ) ) {
 		$str_request .= $chr;
 		echo ($chr);
 		if ( ShoshoneUtil::str_endswith( $str_request, chr(13).chr(10).chr(13).chr(10) ) ) break;
@@ -66,9 +66,7 @@ class Shoshone {
 		
 			switch( $method ) {
 				case 'GET':
-					#echo 'get: ' . $protocol . $file.'|'.PHP_EOL;
 					$content = Shoshone::server_get( $file );
-					
 				break;
 				case 'POST':
 				break;

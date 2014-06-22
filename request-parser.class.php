@@ -11,9 +11,10 @@ class RequestParser {
 				case 'css':  $info = 'text/css';               break;
 				case 'htm':
 				case 'html': $info = 'text/html';              break;
-				case 'js':   $info = 'application/javascript'; break;
+				case 'js':   $info = 'text/javascript'; break;
 			}
 		}
+		echo $info.PHP_EOL;
 		return $info;
 	}
 	
